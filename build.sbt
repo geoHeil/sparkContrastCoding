@@ -1,4 +1,4 @@
-name := "estimatorPersistenceProblem"
+name := "estimatorSpeedProblem"
 organization := "geoheil"
 
 scalaVersion := "2.11.8"
