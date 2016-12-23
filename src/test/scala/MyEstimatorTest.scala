@@ -1,17 +1,17 @@
 package at.ac.tuwien.thesis.heiler.ml
 
-import com.holdenkarau.spark.testing.{ DatasetSuiteBase, SharedSparkContext }
+import com.holdenkarau.spark.testing.{DatasetSuiteBase, SharedSparkContext}
 import org.apache.spark.ml.feature._
 import org.apache.spark.sql.functions.monotonically_increasing_id
 import org.scalatest.FunSuite
 
 /**
-  * This coder assumes that all null values were imputed before using it!
-  */
+ * This coder assumes that all null values were imputed before using it!
+ */
 case class ExpectedOutput(TARGET: Int, col1: String, col2: String, col4: String,
-                          pre_col1: Option[Double], pre_col2: Option[Double],
-                          pre2_col1: Option[Double], pre2_col2: Option[Double],
-                          pre_col3TooMany: Option[Double], pre2_col3TooMany: Option[Double])
+  pre_col1: Option[Double], pre_col2: Option[Double],
+  pre2_col1: Option[Double], pre2_col2: Option[Double],
+  pre_col3TooMany: Option[Double], pre2_col3TooMany: Option[Double])
 
 class PercentageCoderTest extends FunSuite with SharedSparkContext with DatasetSuiteBase {
 
@@ -43,12 +43,16 @@ class PercentageCoderTest extends FunSuite with SharedSparkContext with DatasetS
     val inputDf = input.toDF("TARGET", "col1", "col2", "col3TooMany", "col4").withColumn("rowId", monotonically_increasing_id())
     val expectedOutputDf = expectedOutput.toDF
 
-    val result = new PercentageCoder()
+    val pct = new PercentageCoder()
       .setColsToDrop(inputToDrop)
       .setColsToTransform(inputToBias)
       .setTarget("TARGET")
-      .fit(inputDf)
-      .transform(inputDf)
+
+    time { pct.fit(inputDf) }
+    val pctModel = pct.fit(inputDf)
+
+    time { pctModel.transform(inputDf) }
+    val result = pctModel.transform(inputDf)
 
     val orderedResult = result
       .select("TARGET", "col1", "col2", "col4", "pre_col1", "pre_col2", "pre2_col1", "pre2_col2", "pre_col3TooMany", "pre2_col3TooMany")
@@ -100,5 +104,14 @@ class PercentageCoderTest extends FunSuite with SharedSparkContext with DatasetS
       .select("col1", "col2", "col4", "pre_col1", "pre_col2", "pre2_col1", "pre2_col2", "pre_col3TooMany", "pre2_col3TooMany")
 
     assertDataFrameApproximateEquals(expectedOutputDf, orderedResult, 0.001)
+  }
+
+  def time[R](block: => R): R = {
+    val t0 = System.nanoTime()
+    val result = block
+    // call-by-name
+    val t1 = System.nanoTime()
+    println("Elapsed time: " + (t1 - t0) + "ns")
+    result
   }
 }

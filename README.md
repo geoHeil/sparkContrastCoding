@@ -15,7 +15,7 @@ As I am dealing with a binary classification problem my idea was to 'measure' th
 
 This repository contains a `PercentageCoder` for spark. 
 
-However it is slow. 
+However it is slow. For the minimal example here a fit may take around 6 Seconds. The transform is rather quick, but slow to build up due to the collect.
   - I noticed that `run at ThreadPoolExecutor.java:1142` appears very often. Is this a problem?
 [http://stackoverflow.com/questions/41298550/spark-threadpoolexecutor-java-in-spark-tasks](http://stackoverflow.com/questions/41298550/spark-threadpoolexecutor-java-in-spark-tasks)
   - spark is spending a lot of the time in the garbage collection
@@ -23,7 +23,10 @@ However it is slow.
   - The DAG was already sort of optimized [http://stackoverflow.com/questions/41169873/spark-dynamic-dag-is-a-lot-slower-and-different-from-hard-coded-dag](http://stackoverflow.com/questions/41169873/spark-dynamic-dag-is-a-lot-slower-and-different-from-hard-coded-dag),
 but still is one of the slowest operations in my pipeline. 
 
-Executing `sbt test` contains some test cases which show how to use `PercentageCoder`
+Executing `sbt test` contains some test cases which show how to use `PercentageCoder`.
+
+*I am looking forward to any ideas how to speed this thing up*
+ Thanks a lot.
 
 Sample output would look like:
 
