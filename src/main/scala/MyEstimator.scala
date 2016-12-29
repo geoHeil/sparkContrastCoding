@@ -90,7 +90,7 @@ class PercentageCoder(override val uid: String) extends Estimator[PercentageCode
   override def fit(df: Dataset[_]): PercentageCoderModel = {
     val targetCounts = df.filter(df(target) === 1).groupBy(target).agg(count(target).as("cnt_foo_eq_1"))
     val newDF = df.toDF.join(broadcast(targetCounts), Seq(target), "left")
-    newDf.cache
+    newDF.cache
     val res = (columnsToDrop ++ columnsToCode).toSet.foldLeft(newDF) {
       (currentDF, colName) =>
       {
