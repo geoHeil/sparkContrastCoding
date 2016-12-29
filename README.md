@@ -47,3 +47,5 @@ Sample output would look like:
 ## Event timeline
 
 ![delay](img/delay.jpg "Delay before pipeline step") Why is there such a huge delay until this task starts after loading and cleaning of the data?
+
+Why is spark spending so much time (see logs) in the code generator?
