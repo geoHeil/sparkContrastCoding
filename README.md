@@ -43,3 +43,7 @@ Sample output would look like:
 |   A|   B|         1|          C|   D|0.6666666666666666|      0.5|0.6666666666666666|      0.5|
 +----+----+----------+-----------+----+------------------+---------+------------------+---------+
 ```
+
+## Event timeline
+
+![delay](img/delay.jpg "Delay before pipeline step") Why is there such a huge delay until this task starts after loading and cleaning of the data?
