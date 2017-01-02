@@ -46,6 +46,7 @@ Sample output would look like:
 ## Proposed improvements
 
 - maybe use RDD api and something similar to http://stackoverflow.com/questions/25171070/spark-processing-columns-in-parallel
+- http://stackoverflow.com/questions/41425308/spark-apply-function-to-columns-in-parallel#41426792 definitely RDD should be worth a try
 
 ## Event timeline
 
