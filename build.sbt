@@ -36,17 +36,8 @@ initialCommands in console :=
     |import org.apache.log4j.{Level, Logger}
     |import org.apache.spark.SparkConf
     |import org.apache.spark.sql.SparkSession
+    |import org.apache.spark.sql.functions._
     |
-    |val input = Seq(
-    |    (0, "A", "B", "C", "D"),
-    |    (1, "A", "B", "C", "D"),
-    |    (0, "d", "a", "jkl", "d"),
-    |    (0, "d", "g", "C", "D"),
-    |    (1, "A", "d", "t", "k"),
-    |    (1, "d", "c", "C", "D"),
-    |    (1, "c", "B", "C", "D")
-    |  )
-    |  val inputToDrop = Seq("col3TooMany")
     |  val inputToBias = Seq("col1", "col2")
     |
     |  Logger.getLogger("org").setLevel(Level.WARN)
@@ -64,5 +55,13 @@ initialCommands in console :=
     |
     |  import spark.implicits._
     |
-    |  val inputDf = input.toDF("TARGET", "col1", "col2", "col3TooMany", "col4")
+    |val df = Seq(
+    |    (0, "A", "B", "C", "D"),
+    |    (1, "A", "B", "C", "D"),
+    |    (0, "d", "a", "jkl", "d"),
+    |    (0, "d", "g", "C", "D"),
+    |    (1, "A", "d", "t", "k"),
+    |    (1, "d", "c", "C", "D"),
+    |    (1, "c", "B", "C", "D")
+    |  ).toDF("TARGET", "col1", "col2", "col3TooMany", "col4")
   """.stripMargin

@@ -45,6 +45,8 @@ object ColumnParallel extends App {
   //  val rdd1 = rdd.flatMap { x => {(0 until x.size).map(idx => (idx, x(idx)))}}
   val rdd1 = rdd.flatMap { x => {x.indices.map(idx => (idx, x(idx)))}}
   rdd1.toDF.show
+  val rdd1_inputDf = inputDf.rdd.flatMap { x => {(0 until x.size).map(idx => (idx, x(idx)))}}
+  rdd1_inputDf.toDF.show
   //  rdd1: org.apache.spark.rdd.RDD[(Int, String)] = FlatMappedRDD[27] at flatMap at <console>:14
 
   val rdd2 = rdd1.map(x => (x, 1))
@@ -61,6 +63,7 @@ object ColumnParallel extends App {
 
   rdd3.take(4)
   //        res22: Array[((Int, String), Int)] = Array(((0,x_0),4), ((3,x_3),4), ((2,x_2),4), ((1,x_1),4))
+
 
   spark.stop
 }
