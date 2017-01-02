@@ -10,7 +10,7 @@ scalacOptions ++= Seq("-deprecation", "-feature")
 javaOptions ++= Seq("-Xms512M", "-Xmx2048M", "-XX:MaxPermSize=2048M", "-XX:+CMSClassUnloadingEnabled")
 parallelExecution in Test := false
 
-lazy val spark = "2.0.2"
+lazy val spark = "2.1.0"
 
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % spark % "provided",
@@ -30,3 +30,39 @@ assemblyMergeStrategy in assembly := {
 }
 
 mainClass := Some("Percentage")
+
+initialCommands in console :=
+  """
+    |import org.apache.log4j.{Level, Logger}
+    |import org.apache.spark.SparkConf
+    |import org.apache.spark.sql.SparkSession
+    |
+    |val input = Seq(
+    |    (0, "A", "B", "C", "D"),
+    |    (1, "A", "B", "C", "D"),
+    |    (0, "d", "a", "jkl", "d"),
+    |    (0, "d", "g", "C", "D"),
+    |    (1, "A", "d", "t", "k"),
+    |    (1, "d", "c", "C", "D"),
+    |    (1, "c", "B", "C", "D")
+    |  )
+    |  val inputToDrop = Seq("col3TooMany")
+    |  val inputToBias = Seq("col1", "col2")
+    |
+    |  Logger.getLogger("org").setLevel(Level.WARN)
+    |  val logger: Logger = Logger.getLogger(this.getClass)
+    |
+    |  val conf: SparkConf = new SparkConf()
+    |    .setAppName("columnParallel")
+    |    .setMaster("local[*]")
+    |    .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+    |
+    |  val spark: SparkSession = SparkSession
+    |    .builder()
+    |    .config(conf)
+    |    .getOrCreate()
+    |
+    |  import spark.implicits._
+    |
+    |  val inputDf = input.toDF("TARGET", "col1", "col2", "col3TooMany", "col4")
+  """.stripMargin

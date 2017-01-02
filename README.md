@@ -43,6 +43,9 @@ Sample output would look like:
 |   A|   B|         1|          C|   D|0.6666666666666666|      0.5|0.6666666666666666|      0.5|
 +----+----+----------+-----------+----+------------------+---------+------------------+---------+
 ```
+## Proposed improvements
+
+- maybe use RDD api and something similar to http://stackoverflow.com/questions/25171070/spark-processing-columns-in-parallel
 
 ## Event timeline
 
