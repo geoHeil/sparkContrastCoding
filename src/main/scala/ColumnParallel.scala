@@ -2,6 +2,8 @@ import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 
+case class MyClass(TARGET: Int, col1:String, col2:String, col3TooMany:String, col4:String)
+
 object ColumnParallel extends App {
 
   val input = Seq(
@@ -31,7 +33,8 @@ object ColumnParallel extends App {
 
   import spark.implicits._
 
-  val inputDf = input.toDF("TARGET", "col1", "col2", "col3TooMany", "col4")
+  val inputDf = input.toDF("TARGET", "col1", "col2", "col3TooMany", "col4").as[MyClass]
+//  val inputDs = inputDf.as[MyClass]
 
   // TODO try out parallelization with spark-RDD API. From http://stackoverflow.com/questions/25171070/spark-processing-columns-in-parallel
   // so far: not really sure how to use it for contrast coding
@@ -45,8 +48,11 @@ object ColumnParallel extends App {
   //  val rdd1 = rdd.flatMap { x => {(0 until x.size).map(idx => (idx, x(idx)))}}
   val rdd1 = rdd.flatMap { x => {x.indices.map(idx => (idx, x(idx)))}}
   rdd1.toDF.show
-  val rdd1_inputDf = inputDf.rdd.flatMap { x => {(0 until x.size).map(idx => (idx, x(idx)))}}
-  rdd1_inputDf.toDF.show
+  inputDf.rdd.toDF.show
+//  inputDf.rdd.keyBy(_.TARGET).groupByKey.foreach{println}
+  // TODO no access to index
+//  val rdd1_inputDf = inputDf.rdd.flatMap { x => {x.indices.map(idx => (idx, x(idx)))}}
+//  rdd1_inputDf.toDF.show
   //  rdd1: org.apache.spark.rdd.RDD[(Int, String)] = FlatMappedRDD[27] at flatMap at <console>:14
 
   val rdd2 = rdd1.map(x => (x, 1))

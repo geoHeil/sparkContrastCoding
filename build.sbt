@@ -64,4 +64,5 @@ initialCommands in console :=
     |    (1, "d", "c", "C", "D"),
     |    (1, "c", "B", "C", "D")
     |  ).toDF("TARGET", "col1", "col2", "col3TooMany", "col4")
+    |val inputDf = df
   """.stripMargin
