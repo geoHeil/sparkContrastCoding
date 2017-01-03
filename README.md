@@ -47,6 +47,7 @@ Sample output would look like:
 
 - maybe use RDD api and something similar to http://stackoverflow.com/questions/25171070/spark-processing-columns-in-parallel
 - http://stackoverflow.com/questions/41425308/spark-apply-function-to-columns-in-parallel#41426792 definitely RDD should be worth a try
+- first steps with RDD API http://stackoverflow.com/questions/41434112/spark-convert-spark-sql-to-rdd-api anyone interested to help?
 
 ## Event timeline
 
